@@ -3,44 +3,44 @@
   * [🐌 The Basics](1-the-manual-menace/1-the-basics.md)
   * [🐙 ArgoCD](1-the-manual-menace/2-argocd.md)
   * [🔥🦄 Ubiquitous Journey](1-the-manual-menace/3-ubiquitous-journey.md)
-  * [🦜 Extend UJ](1-the-manual-menace/4-extend-uj.md)
-  * [🏃🏻‍♀️ This is GitOps](1-the-manual-menace/5-this-is-gitops.md)
-  * [🐉 Here Be Dragons!](1-the-manual-menace/666-here-be-dragons.md)
+  <!-- * [🦜 Extend UJ](1-the-manual-menace/4-extend-uj.md) -->
+  <!-- * [🏃🏻‍♀️ This is GitOps](1-the-manual-menace/5-this-is-gitops.md) -->
+  <!-- * [🐉 Here Be Dragons!](1-the-manual-menace/666-here-be-dragons.md) -->
 * [2. Attack of the Pipelines](2-attack-of-the-pipelines/README.md)
   * [🕵🏻‍♂️ Sealed Secrets](2-attack-of-the-pipelines/1-sealed-secrets.md)
   * [🙌🏻 Application of Applications](2-attack-of-the-pipelines/2-app-of-apps.md)
   * [🏃🏻‍♀️ The Pipelines](2-attack-of-the-pipelines/3-the-pipelines.md)
-    * [👥 Setting A New Group](2-attack-of-the-pipelines/3c-create-new-group.md)
-    * [🌸 Jenkins](2-attack-of-the-pipelines/3a-jenkins.md)
-    * [🐈 Tekton](2-attack-of-the-pipelines/3b-tekton.md)    
-  * [🐉 Here Be Dragons!](2-attack-of-the-pipelines/666-here-be-dragons.md)
+    <!-- * [👥 Setting A New Group](2-attack-of-the-pipelines/3c-create-new-group.md) -->
+    <!-- * [🌸 Jenkins](2-attack-of-the-pipelines/3a-jenkins.md) -->
+    <!-- * [🐈 Tekton](2-attack-of-the-pipelines/3b-tekton.md)     -->
+  <!-- * [🐉 Here Be Dragons!](2-attack-of-the-pipelines/666-here-be-dragons.md) -->
 * [3. Revenge of the Automated Testing](3-revenge-of-the-automated-testing/README.md)
   * [✈️ Sonarqube](3-revenge-of-the-automated-testing/1-sonar-scanning.md)
-    * [🌸 Jenkins](3-revenge-of-the-automated-testing/1a-jenkins.md)
+    <!-- * [🌸 Jenkins](3-revenge-of-the-automated-testing/1a-jenkins.md) -->
     * [🐈 Tekton](3-revenge-of-the-automated-testing/1b-tekton.md)
   * [🧪 Testing](3-revenge-of-the-automated-testing/2-automated-testing.md)
-    * [🌸 Jenkins](3-revenge-of-the-automated-testing/2a-jenkins.md)
+    <!-- * [🌸 Jenkins](3-revenge-of-the-automated-testing/2a-jenkins.md) -->
     * [🐈 Tekton](3-revenge-of-the-automated-testing/2b-tekton.md)
   * [🧤 Code Linting](3-revenge-of-the-automated-testing/4-code-linting.md)
-    * [🌸 Jenkins](3-revenge-of-the-automated-testing/4a-jenkins.md)
+    <!-- * [🌸 Jenkins](3-revenge-of-the-automated-testing/4a-jenkins.md) -->
     * [🐈 Tekton](3-revenge-of-the-automated-testing/4b-tekton.md)
   * [🏟️ Kube Linting](3-revenge-of-the-automated-testing/5-kube-linting.md)
-    * [🌸 Jenkins](3-revenge-of-the-automated-testing/5a-jenkins.md)
+    <!-- * [🌸 Jenkins](3-revenge-of-the-automated-testing/5a-jenkins.md) -->
     * [🐈 Tekton](3-revenge-of-the-automated-testing/5b-tekton.md)
   * [🐝 OWASP Zap Scanning](3-revenge-of-the-automated-testing/6-zap-security.md)
-    * [🌸 Jenkins](3-revenge-of-the-automated-testing/6a-jenkins.md)
+    <!-- * [🌸 Jenkins](3-revenge-of-the-automated-testing/6a-jenkins.md) -->
     * [🐈 Tekton](3-revenge-of-the-automated-testing/6b-tekton.md)
   * [⛰️ Image Security](3-revenge-of-the-automated-testing/7-image-security.md)
-    * [🌸 Jenkins](3-revenge-of-the-automated-testing/7a-jenkins.md)
+    <!-- * [🌸 Jenkins](3-revenge-of-the-automated-testing/7a-jenkins.md) -->
     * [🐈 Tekton](3-revenge-of-the-automated-testing/7b-tekton.md)
   * [©️ Image Signing](3-revenge-of-the-automated-testing/8-image-signing.md)
-    * [🌸 Jenkins](3-revenge-of-the-automated-testing/8a-jenkins.md)
+    <!-- * [🌸 Jenkins](3-revenge-of-the-automated-testing/8a-jenkins.md) -->
     * [🐈 Tekton](3-revenge-of-the-automated-testing/8b-tekton.md)
   * [🧾 Generate SBOMs](3-revenge-of-the-automated-testing/9-sbom.md)
-    * [🌸 Jenkins](3-revenge-of-the-automated-testing/9a-jenkins.md)
+    <!-- * [🌸 Jenkins](3-revenge-of-the-automated-testing/9a-jenkins.md) -->
     * [🐈 Tekton](3-revenge-of-the-automated-testing/9b-tekton.md)
   * [🏋️ Load Testing](3-revenge-of-the-automated-testing/10-load-testing.md)
-    * [🌸 Jenkins](3-revenge-of-the-automated-testing/10a-jenkins.md)
+    <!-- * [🌸 Jenkins](3-revenge-of-the-automated-testing/10a-jenkins.md) -->
     * [🐈 Tekton](3-revenge-of-the-automated-testing/10b-tekton.md)
   * [🦤 System Tests](3-revenge-of-the-automated-testing/11-system-test.md)
     <!-- * [🌸 Jenkins](3-revenge-of-the-automated-testing/11a-jenkins.md)

@@ -4,15 +4,6 @@ When we say GitOps, we say _"if it's not in Git, it's NOT REAL"_ but how are we 
 
 Sealed Secrets allows us to _seal_ Kubernetes secrets by using a utility called `kubeseal`. The `SealedSecrets` are Kubernetes resources that contain encrypted `Secret` object that only the controller can decrypt. Therefore, a `SealedSecret` is safe to store even in a public repository.
 
-<p class="warn">
-    ⛷️ <b>NOTE</b> ⛷️ - If you switch to a different CodeReady Workspaces environment, please run below commands before going forward.
-</p>
-
-```bash
-cd /projects/tech-exercise
-git remote set-url origin https://${GIT_SERVER}/${TEAM_NAME}/tech-exercise.git
-git pull
-```
 
 ### Sealed Secrets in action
 
@@ -35,10 +26,8 @@ git pull
     type: kubernetes.io/basic-auth
     metadata:
       annotations:
-        tekton.dev/git-0: https://${GIT_SERVER}
+        tekton.dev/git-0: https://<GIT_SERVER>
         sealedsecrets.bitnami.com/managed: "true"
-      labels:
-        credential.sync.jenkins.openshift.io: "true"
       name: git-auth
 EOF
     ```
@@ -112,8 +101,6 @@ EOF
               type: kubernetes.io/basic-auth
               annotations:
                 tekton.dev/git-0: https://<GIT_SERVER>
-              labels:
-                credential.sync.jenkins.openshift.io: "true"
               data:
                 username: <YOUR_SEALED_SECRET_USERNAME>
                 password: <YOUR_SEALED_SECRET_PASSWORD>
@@ -123,7 +110,7 @@ EOF
 
     ```bash#test
     if [[ $(yq e '.applications[] | select(.name=="sealed-secrets") | length' /projects/tech-exercise/ubiquitous-journey/values-tooling.yaml) < 1 ]]; then
-        yq e '.applications += {"name": "sealed-secrets","enabled": true,"source": "https://redhat-cop.github.io/helm-charts","chart_name": "helper-sealed-secrets","source_ref": "1.0.3","values": {"secrets": [{"name": "git-auth","type": "kubernetes.io/basic-auth","annotations": {"tekton.dev/git-0": "https://GIT_SERVER","sealedsecrets.bitnami.com/managed": "true"},"labels": {"credential.sync.jenkins.openshift.io": "true"},"data": {"username": "SEALED_SECRET_USERNAME","password": "SEALED_SECRET_PASSWORD"}}]}}' -i /projects/tech-exercise/ubiquitous-journey/values-tooling.yaml
+        yq e '.applications += {"name": "sealed-secrets","enabled": true,"source": "https://redhat-cop.github.io/helm-charts","chart_name": "helper-sealed-secrets","source_ref": "1.0.3","values": {"secrets": [{"name": "git-auth","type": "kubernetes.io/basic-auth","annotations": {"tekton.dev/git-0": "https://GIT_SERVER","sealedsecrets.bitnami.com/managed": "true"},"data": {"username": "SEALED_SECRET_USERNAME","password": "SEALED_SECRET_PASSWORD"}}]}}' -i /projects/tech-exercise/ubiquitous-journey/values-tooling.yaml
         SEALED_SECRET_USERNAME=$(yq e '.spec.encryptedData.username' /tmp/sealed-git-auth.yaml)
         SEALED_SECRET_PASSWORD=$(yq e '.spec.encryptedData.password' /tmp/sealed-git-auth.yaml)
         sed -i "s|GIT_SERVER|$GIT_SERVER|" /projects/tech-exercise/ubiquitous-journey/values-tooling.yaml
@@ -147,11 +134,3 @@ EOF
 8. If you drill into the `SealedSecret` on ArgoCD's UI - you should see the `git-auth` secret has synced automatically:
 
     ![argocd-git-auth-synced.png](images/argocd-git-auth-synced.png)
-
-9. You can also verify it's been synced to Jenkins now by opening `Jenkins -> Manage Jenkins -> Manage Credentials` to view `<TEAM_NAME>-ci-cd-git-auth`
-
-    ```bash#test
-    echo https://$(oc get route jenkins --template='{{ .spec.host }}' -n ${TEAM_NAME}-ci-cd)
-    ```
-
-    ![jenkins-sync.png](images/jenkins-sync.png)

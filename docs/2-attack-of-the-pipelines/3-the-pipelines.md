@@ -11,19 +11,10 @@ Why create pipelines:
   * More prod like infrastructure increases assurance
   * “We have already done it” behavior de-risks go live
 
-<p class="warn">
-    ⛷️ <b>NOTE</b> ⛷️ - If you switch to a different CodeReady Workspaces environment, please run below commands before going forward.
-</p>
-
-```bash
-cd /projects/tech-exercise
-git remote set-url origin https://${GIT_SERVER}/${TEAM_NAME}/tech-exercise.git
-git pull
-```
-
 🐈 <span style="color:purple;">Expected Outcome</span>: Working pipelines that build the Pet Battle applications (front end and back) - yes .. **Cats** !! 🐈
 
-![daisy-cat.png](images/daisy-cat.png)
+![cross.png](images/cross.png)
+
 
 ### Tekton Pipeline
 
@@ -43,33 +34,7 @@ In this snippet of the pipeline used in this exercise, we define:
 
 #### Deploying the Tekton Objects
 
-1. Open the GitLab UI. Create a Project in GitLab under `<TEAM_NAME>` group called `pet-battle-api`. Make the project as **internal**.
-
-    ![pet-battle-api-git-repo](images/pet-battle-api-git-repo.png)
-
-2. Back in your CodeReady Workspace, we'll fork the PetBattle API code to this newly created repository on git.
-
-    ```bash#test
-    cd /projects
-    git clone https://github.com/rht-labs/pet-battle-api.git && cd pet-battle-api
-    git remote set-url origin https://${GIT_SERVER}/${TEAM_NAME}/pet-battle-api.git
-    git branch -M main
-    git push -u origin main
-    ```
-    <p class="warn">
-        ⛷️ <b>NOTE</b> ⛷️ - If pet-battle-api folder is not appeared on the left hand side, you need to add it to your workspace manually as follows: 
-    </p>
-
-    Click the hamburger menu on top left, then `File > Add Folder to Workspace`
-    ![add-workspace-pet-battle](./images/add-workspace-pet-battle.png)
-
-    Select `pet-battle-api` from the list and click `OK`.
-    ![add-workspace-pet-battle-api](./images/add-workspace-pet-battle-api.png)
-
-    _If the page refreshes after your selection, just reopen the terminal by hitting the hamburger menu on top left then select `Terminal > New Terminal` from the menu._
-
-
-3. Unlike Jenkins, our Tekton pipeline definitions are not stored with the codebase. Instead, they're wrapped as Helm Chart along with our Ubiquitous Journey project. The Tekton Pipelines chart is in the root of the `tech-exercise`:
+1. Unlike Jenkins, our Tekton pipeline definitions are not stored with the codebase. Instead, they're wrapped as Helm Chart along with our Ubiquitous Journey project. The Tekton Pipelines chart is in the root of the `tech-exercise`:
     <div class="highlight" style="background: #f7f7f7">
     <pre><code class="language-bash">
     tekton
@@ -121,17 +86,6 @@ In this snippet of the pipeline used in this exercise, we define:
           git_server: <GIT_SERVER>
     ```
 
-    You can also run this bit of code to do the replacement if you are feeling uber lazy!
-
-    ```bash#test
-    if [[ $(yq e '.applications[] | select(.name=="tekton-pipeline") | length' /projects/tech-exercise/ubiquitous-journey/values-tooling.yaml) < 1 ]]; then
-        yq e '.applications += {"name": "tekton-pipeline","enabled": true,"source": "https://GIT_SERVER/TEAM_NAME/tech-exercise.git","source_ref": "main","source_path": "tekton","values": {"team": "TEAM_NAME","cluster_domain": "CLUSTER_DOMAIN","git_server": "GIT_SERVER"}}' -i /projects/tech-exercise/ubiquitous-journey/values-tooling.yaml
-        sed -i "s|GIT_SERVER|$GIT_SERVER|" /projects/tech-exercise/ubiquitous-journey/values-tooling.yaml
-        sed -i "s|TEAM_NAME|$TEAM_NAME|" /projects/tech-exercise/ubiquitous-journey/values-tooling.yaml    
-        sed -i "s|CLUSTER_DOMAIN|$CLUSTER_DOMAIN|" /projects/tech-exercise/ubiquitous-journey/values-tooling.yaml    
-    fi
-    ```
-
 5. Tekton will push changes to our Helm Chart to Nexus as part of the pipeline. Originally we configured our App of Apps to pull from a different chart repository so we also need to update out Pet Battle `pet-battle/test/values.yaml` file to point to the Nexus chart repository deployed in OpenShift. Update the `source` as shown below for the `pet-battle-api`:
 
     <div class="highlight" style="background: #f7f7f7">
@@ -147,12 +101,6 @@ In this snippet of the pipeline used in this exercise, we define:
           image_name: pet-battle-api
           image_version: latest # container image version
     </code></pre></div>
-
-    You can also run this bit of code to do the replacement if you are feeling uber lazy!
-
-    ```bash#test
-    yq e '.applications.pet-battle-api.source |="http://nexus:8081/repository/helm-charts"' -i /projects/tech-exercise/pet-battle/test/values.yaml
-    ```
 
 6. Update git and wait for our Tekton pipelines to deploy out in ArgoCD.
 
@@ -171,7 +119,6 @@ In this snippet of the pipeline used in this exercise, we define:
     ```bash#test
     echo https://$(oc -n ${TEAM_NAME}-ci-cd get route webhook --template='{{ .spec.host }}')
     ```
-_Note: If you are seeing PVCs are still in Progressing status on Argo CD, it is because the OpenShift cluster is waiting for the first consumer aka the first pipeline run to create the Persistent Volumes. The sync status will be green after the first run ☘️_
 
 8. Once you have the URL, over on GitLab go to `pet-battle-api > Settings > Integrations` to add the webhook:
 
@@ -181,18 +128,7 @@ _Note: If you are seeing PVCs are still in Progressing status on Argo CD, it is 
 
     ![gitlab-webhook-trigger.png](images/gitlab-webhook-trigger.png)
 
-    You can test the webhook works from GitLab.
-
-    ![gitlab-test-webhook.png](images/gitlab-test-webhook.png)
-
 9. With all these components in place - now it's time to trigger pipeline via webhook by checking in some code for Pet Battle API. Lets make a simple change to the application version. Edit pet-battle-api `pom.xml` found in the root of the `pet-battle-api` project and update the `version` number. The pipeline will update the `chart/Chart.yaml` with these versions for us.
-
-    ```xml
-        <artifactId>pet-battle-api</artifactId>
-        <version>1.3.1</version>
-    ```
-
-    You can also run this bit of code to do the replacement if you are feeling uber lazy!
 
     ```bash#test
     cd /projects/pet-battle-api
@@ -218,4 +154,4 @@ _Note: If you are seeing PVCs are still in Progressing status on Argo CD, it is 
 tkn -n ${TEAM_NAME}-ci-cd pr logs -Lf
 ```
 
-🪄OBSERVE PIPELINE RUNNING :D - At this point check in with the other half of the group and see if you’ve managed to integrate the apps🪄
+🪄 OBSERVE THE PIPELINE IS RUNNING 🪄

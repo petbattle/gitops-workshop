@@ -106,7 +106,7 @@ EOF
                 password: <YOUR_SEALED_SECRET_PASSWORD>
     ```
 
-    You can also run this bit of code to do the replacement if you are feeling uber lazy!
+    You can also run this bit of code to do the replacement if you are feeling uber lazy! 😴
 
     ```bash#test
     if [[ $(yq e '.applications[] | select(.name=="sealed-secrets") | length' /projects/tech-exercise/ubiquitous-journey/values-tooling.yaml) < 1 ]]; then

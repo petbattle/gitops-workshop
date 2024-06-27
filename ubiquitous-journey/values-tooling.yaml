@@ -12,10 +12,6 @@ applications:
         - name: student
           kind: Group
           role: admin
-        - name: jenkins
-          kind: ServiceAccount
-          role: admin
-          namespace: TEAM_NAME-ci-cd
       namespaces:
         - name: TEAM_NAME-ci-cd
           bindings: *binds
@@ -29,6 +25,27 @@ applications:
         - name: TEAM_NAME-stage
           bindings: *binds
           operatorgroup: true
+
+  # Nexus
+  - name: nexus
+    enabled: true
+    source: https://redhat-cop.github.io/helm-charts
+    chart_name: sonatype-nexus
+    source_ref: "1.1.7"
+    values:
+      deploymentStrategy:
+        type: Recreate
+      nexus:
+        env:
+        - name: install4jAddVmParams
+          value: -Xms1200M -Xmx1200M -XX:MaxDirectMemorySize=2G -XX:+UnlockExperimentalVMOptions
+            -XX:+UseCGroupMemoryLimitForHeap
+        - name: NEXUS_SECURITY_RANDOMPASSWORD
+          value: "false"
+      includeRHRepositories: false
+      service:
+        name: nexus
+
 
   # Sealed Secrets
 
@@ -46,5 +63,3 @@ applications:
 
 
   # Matomo
-
-  # Zalenium

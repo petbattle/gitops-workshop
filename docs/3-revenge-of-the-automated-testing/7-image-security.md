@@ -139,9 +139,9 @@ StackRox / Advanced Cluster Security (ACS) is deployed once at the cluster scope
 
 Now we can use ACS to help move security **LEFT** in our build pipeline. In each group we will do the following:
 
-| 🐈‍⬛ **Jenkins Group** 🐈‍⬛  |  🐅 **Tekton Group** 🐅 |
-|-----------------------|----------------------------|
+| |
+|---------------------------------------------------|
 | * Configure your pipeline to `check` build time policy violations | * Configure your pipeline to `check` build time policy violations |
 | * Configure your pipeline to `scan` images for CVE/CVSS | * Configure your pipeline to `scan` images for CVE/CVSS |
 | * Break/Fix your pipeline | * Break/Fix your pipeline |
-| <span style="color:blue;">[jenkins](3-revenge-of-the-automated-testing/7a-jenkins.md)</span> | <span style="color:blue;">[tekton](3-revenge-of-the-automated-testing/7b-tekton.md)</span> |
+

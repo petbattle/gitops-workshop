@@ -93,8 +93,7 @@ _This step makes more sense when you use an external image registry and share im
 
 #### In your groups pick the tool you'd like to integrate the pipeline with:
 
-| 🐈‍⬛ **Jenkins Group** 🐈‍⬛  |  🐅 **Tekton Group** 🐅 |
-|-----------------------|----------------------------|
+| |
+|---------------------------------------------------|
 | * Generate SBOM with Syft in our pipeline| * Generate SBOM with Syft in our pipeline |
 | * Sign, attach and attest SBOM | * Sign, attach and attest SBOM |
-| <span style="color:blue;">[jenkins](3-revenge-of-the-automated-testing/9a-jenkins.md)</span> | <span style="color:blue;">[tekton](3-revenge-of-the-automated-testing/9b-tekton.md)</span> |

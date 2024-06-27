@@ -1,10 +1,49 @@
 release: "stage"
 source: "http://nexus:8081/repository/helm-charts/"
-
 ##############
 # Argo Apps declaration
 #############
 applications:
   # Keycloak
-
+  keycloak:
+    name: keycloak
+    enabled: true
+    source: https://github.com/petbattle/pet-battle-infra
+    source_ref: main
+    source_path: keycloak
+    values:
+      app_domain: CLUSTER_DOMAIN
+ 
   # Pet Battle Apps
+  pet-battle-api:
+    name: pet-battle-api
+    enabled: true
+    source: https://petbattle.github.io/helm-charts  # http://nexus:8081/repository/helm-charts
+    chart_name: pet-battle-api
+    source_ref: 1.2.1 # helm chart version
+    values:
+      image_name: pet-battle-api
+      image_version: latest # container image version
+      hpa:
+        enabled: false
+
+  pet-battle:
+    name: pet-battle
+    enabled: true
+    source: https://petbattle.github.io/helm-charts  # http://nexus:8081/repository/helm-charts 
+    chart_name: pet-battle
+    source_ref: 1.0.6 # helm chart version
+    values:
+      image_version: latest # container image version
+      config_map: '{
+        "catsUrl": "https://pet-battle-api-TEAM_NAME-test.CLUSTER_DOMAIN",
+        "tournamentsUrl": "https://pet-battle-tournament-TEAM_NAME-test.CLUSTER_DOMAIN",
+        "matomoUrl": "https://matomo-TEAM_NAME-ci-cd.CLUSTER_DOMAIN/",
+        "keycloak": {
+          "url": "https://keycloak-TEAM_NAME-stage.CLUSTER_DOMAIN/auth/",
+          "realm": "pbrealm",
+          "clientId": "pbclient",
+          "redirectUri": "http://localhost:4200/tournament",
+          "enableLogging": true
+        }
+      }'

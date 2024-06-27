@@ -26,42 +26,6 @@ When something is seen as not matching the required state in Git, an application
     helm repo add redhat-cop https://redhat-cop.github.io/helm-charts
     ```
 
-2. We are using the [Red Hat GitOps Operator](https://github.com/redhat-developer/gitops-operator) which was deployed as part of the cluster setup. Normally this step would be done as part of the Operator Install so its a bit more complicated than we would like. Because _we did not know_ your team names ahead of time 👻 we will need to update an environment variable on the Operator Subscription. This tells the Operator its OK to deploy a cluster scoped ArgoCD instance into your <TEAM_NAME>-ci-cd project. Run this shell script:
-
-    <p class="tip">
-    🐌 THIS IS NOT GITOPS - Until we work out a better way to automate this. 🐎 If you see "...." in your terminal after you copy this shell script, do not worry. Hit return and it will run as designed.
-    </p>
-
-    ```bash#test
-    run()
-    {
-      NS=$(oc get subscriptions.operators.coreos.com/openshift-gitops-operator -n openshift-operators \
-        -o jsonpath='{.spec.config.env[?(@.name=="ARGOCD_CLUSTER_CONFIG_NAMESPACES")].value}')
-      opp=
-      if [ -z $NS ]; then
-        NS="${TEAM_NAME}-ci-cd"
-        opp=add
-      elif [[ "$NS" =~ .*"${TEAM_NAME}-ci-cd".* ]]; then
-        echo "${TEAM_NAME}-ci-cd already added."
-        return
-      else
-        NS="${TEAM_NAME}-ci-cd,${NS}"
-        opp=replace
-      fi
-      oc -n openshift-operators patch subscriptions.operators.coreos.com/openshift-gitops-operator --type=json \
-        -p '[{"op":"'$opp'","path":"/spec/config/env/1","value":{"name": "ARGOCD_CLUSTER_CONFIG_NAMESPACES", "value":"'${NS}'"}}]'
-      echo "EnvVar set to: $(oc get subscriptions.operators.coreos.com/openshift-gitops-operator -n openshift-operators \
-        -o jsonpath='{.spec.config.env[?(@.name=="ARGOCD_CLUSTER_CONFIG_NAMESPACES")].value}')"
-    }
-    run
-    ```
-
-    The output should look something like this with other teams appended as well:
-    <div class="highlight" style="background: #f7f7f7">
-    <pre><code class="language-bash">
-      subscriptions.operators.coreos.com/openshift-gitops-operator patched
-      EnvVar set to: <TEAM_NAME>-ci-cd,anotherteam-ci-cd
-    </code></pre></div>
 
 2. Let's perform a basic install of ArgoCD. Using most of the defaults defined on the chart is sufficient for our use case.
 
@@ -76,8 +40,8 @@ When something is seen as not matching the required state in Git, an application
     namespaces:
       - ${TEAM_NAME}-ci-cd
     argocd_cr:
-      initialRepositories: |
-        - url: https://${GIT_SERVER}/${TEAM_NAME}/tech-exercise.git
+      repositoryCredentials: |
+        - url: https://${GIT_SERVER}
           type: git
           passwordSecret:
             key: password
@@ -85,11 +49,10 @@ When something is seen as not matching the required state in Git, an application
           usernameSecret:
             key: username
             name: git-auth
-          insecure: true
 EOF
     ```
 
-    Then, deploy Argo CD using helm and this piece of yaml:
+    Then, deploy ArgoCD using helm and this piece of yaml:
 
     ```bash#test
     helm upgrade --install argocd \
@@ -99,7 +62,7 @@ EOF
     ```
 
     <p class="tip">
-    ⛷️ <b>NOTE</b> ⛷️ - It's also worth noting we're allowing Argo CD to run in a fairly permissive mode for these exercise, it can pull charts from anywhere. If you're interested in securing ArgoCD a bit more, checkout the <span style="color:blue;"><a href="/#/1-the-manual-menace/666-here-be-dragons?id=here-be-dragons">here-be-dragons</a></span> exercise at the end of this lab.
+    ⛷️ <b>NOTE</b> ⛷️ - It's also worth noting we're allowing ArgoCD to run in a fairly permissive mode for these exercise, it can pull charts from anywhere. If you're interested in securing ArgoCD a bit more, checkout the <span style="color:blue;"><a href="/#/1-the-manual-menace/666-here-be-dragons?id=here-be-dragons">here-be-dragons</a></span> exercise at the end of this lab.
     </p>
 
 3. If we check in OpenShift we should see the Operator pod coming to life and (eventually) the argocd-server, dex and other pods spin up. To do this, we are going to run a command with a 'watch' flag to continuousy monitor pod creation.
@@ -126,35 +89,6 @@ EOF
 6. Select `Allow selected permissions` for the initial login.
 ![argocd-allow-permission](images/argocd-allow-permission.png)
 
-7. You just logged into ArgoCD 👏👏👏! Lets deploy a sample application through the UI. In fact, let's get ArgoCD to deploy an example `todolist` app. On ArgoCD - click `CREATE APPLICATION`. You should see see an empty form. Let's fill it out by setting the following:
-   * On the "GENERAL" box
-      * Application Name: `our-todolist`
-      * Project: `default`
-      * Sync Policy: `Automatic`
-   * On the "SOURCE" box
-      * Repository URL: `https://rht-labs.com/todolist/`
-      * Select `Helm` from the right drop down menu
-      * Chart: `todolist`
-      * Version: `1.1.0`
-   * On the "DESTINATION" box
-      * Cluster URL: `https://kubernetes.default.svc`
-      * Namespace: `<TEAM_NAME>-ci-cd`
-   * On the "HELM" box
-      * Values Files: `values.yaml`
+![argocd-empty](images/argocd-empty.png)
 
-    Your form should look like this:
-    ![argocd-create-application](images/argocd-create-application.png)
-
-8. After you hit create, you'll see `our-todolist` application is created and should start deploying in your `<TEAM_NAME>-ci-cd` namespace.
-![argocd-todolist](images/argocd-todolist.png)
-
-9. If you drill down into the application you will get ArgoCD's amazing view of all of the k8s resources that were generated by the chart
-![argocd-todolist-detail](images/argocd-todolist-detail.png)
-
-10. You can verify the application is running and behaving as expected by navigating to the url of the app, same way we did for the previous helm deploy.
-
-    ```bash
-    echo https://$(oc get route/our-todolist -n <TEAM_NAME>-ci-cd --template='{{.spec.host}}')
-    ```
-
-🪄🪄 Magic! You've now deployed ArgoCD and got it to manually deploy an application for you. Next up, we'll make ArgoCD do some *REAL* GitOps 🪄🪄
+🪄🪄 Magic! You've now deployed ArgoCD. Next up, we'll make ArgoCD do some *REAL* GitOps 🪄🪄

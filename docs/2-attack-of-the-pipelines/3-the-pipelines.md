@@ -120,7 +120,9 @@ In this snippet of the pipeline used in this exercise, we define:
     echo https://$(oc -n ${TEAM_NAME}-ci-cd get route webhook --template='{{ .spec.host }}')
     ```
 
-8. Once you have the URL, over on GitLab go to `pet-battle-api > Settings > Integrations` to add the webhook:
+8. Once you have the URL, over on GitLab go to `pet-battle-api` repository by clicking [here](https://<GIT_SERVER>/<TEAM_NAME>/pet-battle-api) 👈
+
+   Then from the left menu, go to `Settings > Integrations` to add the webhook:
 
     * select `Push Events`, leve the branch empty for now
     * select `SSL Verification`

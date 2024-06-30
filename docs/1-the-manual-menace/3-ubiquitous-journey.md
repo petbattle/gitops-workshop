@@ -47,9 +47,11 @@ All of these traits lead to one outcome - the ability to build and release quali
     team: <TEAM_NAME>
     ```
 
-2. The `values.yaml` file refers to the `ubiquitous-journey/values-tooling.yaml` which is where we store all the definitions of things we'll need for our CI/CD pipelines. The definitions for things like Nexus, Sonar etc will all live in here eventually, but let's start small with two objects. One for boostrapping the cluster with some namespaces and permissions and Nexus to hold our binaries created by the pipeline. It looks like this:
+2. Go to `tech-exercise` git repository on GitLab by clicking [here](https://<GIT_SERVER>/<TEAM_NAME>/tech-exercise) 👈
 
-![values-tooling](./images/values-tooling.png)
+     From left panel, go to `Settings > Integrations` and add the URL you just copied from your terminal to enable the WebHook. Now whenever a change is made in Git, ArgoCD will instantly reconcile and apply the differences between the current state in the cluster and the desired state in git 🪄. Click `Add webhook`.
+
+    ![gitlab-argocd-webhook](images/gitlab-argocd-webhook.png)
 
 3. In order for ArgoCD to sync the changes from our git repository, we need to provide access to it. We'll deploy a secret to cluster, for now *not done as code* but in the next lab we'll add the secret as code and store it encrypted in Git. In your terminal
 

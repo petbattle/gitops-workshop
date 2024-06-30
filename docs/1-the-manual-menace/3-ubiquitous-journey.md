@@ -49,9 +49,9 @@ All of these traits lead to one outcome - the ability to build and release quali
 
 2. Go to `tech-exercise` git repository on GitLab by clicking [here](https://<GIT_SERVER>/<TEAM_NAME>/tech-exercise) 👈
 
-     From left panel, go to `Settings > Integrations` and add the URL you just copied from your terminal to enable the WebHook. Now whenever a change is made in Git, ArgoCD will instantly reconcile and apply the differences between the current state in the cluster and the desired state in git 🪄. Click `Add webhook`.
+    From left panel, go to `Settings > Integrations` and add the URL you just copied from your terminal to enable the WebHook. Now whenever a change is made in Git, ArgoCD will instantly reconcile and apply the differences between the current state in the cluster and the desired state in git 🪄. Click `Add webhook`.
 
-    ![gitlab-argocd-webhook](images/gitlab-argocd-webhook.png)
+![gitlab-argocd-webhook](images/gitlab-argocd-webhook.png)
 
 3. In order for ArgoCD to sync the changes from our git repository, we need to provide access to it. We'll deploy a secret to cluster, for now *not done as code* but in the next lab we'll add the secret as code and store it encrypted in Git. In your terminal
 

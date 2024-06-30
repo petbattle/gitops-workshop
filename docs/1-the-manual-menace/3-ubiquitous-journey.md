@@ -51,16 +51,7 @@ All of these traits lead to one outcome - the ability to build and release quali
 
 ![values-tooling](./images/values-tooling.png)
 
-3. This is GITOPS - so in order to affect change, let's get the configuration into git, before telling ArgoCD to sync the changes for us.
-
-    ```bash#test
-    cd /projects/tech-exercise/
-    git add .
-    git commit -m  "🦆 ADD - bootstrap and nexus 🦆"
-    git push
-    ```
-
-4. In order for ArgoCD to sync the changes from our git repository, we need to provide access to it. We'll deploy a secret to cluster, for now *not done as code* but in the next lab we'll add the secret as code and store it encrypted in Git. In your terminal
+3. In order for ArgoCD to sync the changes from our git repository, we need to provide access to it. We'll deploy a secret to cluster, for now *not done as code* but in the next lab we'll add the secret as code and store it encrypted in Git. In your terminal
 
     Add the Secret to the cluster:
 
@@ -83,6 +74,7 @@ All of these traits lead to one outcome - the ability to build and release quali
       metadata:
         annotations:
           tekton.dev/git-0: https://${GIT_SERVER}
+          sealedsecrets.bitnami.com/managed: "true"
         name: git-auth
 EOF
     ```
@@ -101,6 +93,10 @@ EOF
 
     ```bash#test
     oc get projects | grep ${TEAM_NAME}
+    ```
+
+    ```bash#test
+    oc get pods -n ${TEAM_NAME}-ci-cd
     ```
 
 🪄🪄 Magic! You've now deployed an app of apps to scaffold our tooling and projects in a repeatable and auditable way (via git!). Next up, we'll make extend the Ubiquitous Journey with some tooling 🪄🪄

@@ -1,7 +1,7 @@
 ## 🐌 The Basics - CRW, OCP & Helm
 ## DevSpaces setup
 
-1. Login to your DevSpaces Editor here - [https://devspaces.<CLUSTER_DOMAIN>](https://devspaces.<CLUSTER_DOMAIN>). Use the `FREE IPA` login and use the user credentials provided by the instructor. Click `tl500` from the left menu. It will open a new browser tab to take you your IDE.
+1. Login to your DevSpaces Editor here - [https://red.ht/kcdmunich-devspaces](https://red.ht/kcdmunich-devspaces). Use the `FREE IPA` login and use the user credentials provided by the instructor. Click `tl500` from the left menu. It will open a new browser tab to take you your IDE.
 
     ![tl500](./images/tl500.png)
 

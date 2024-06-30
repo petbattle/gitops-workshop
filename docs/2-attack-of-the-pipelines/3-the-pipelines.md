@@ -148,10 +148,5 @@ In this snippet of the pipeline used in this exercise, we define:
 
     ![images/tekton-pipeline-running.png](images/tekton-pipeline-running.png)
 
-?> **TIP** You can use the **tkn** command line to observe `PipelineRun` logs as well:
-
-```bash
-tkn -n ${TEAM_NAME}-ci-cd pr logs -Lf
-```
 
 🪄 OBSERVE THE PIPELINE IS RUNNING 🪄

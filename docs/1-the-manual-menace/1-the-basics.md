@@ -26,13 +26,13 @@
     echo ${GIT_SERVER}
     ```
 
-6. Copy your TEAM_NAME (`labX`) and CLUSTER_DOMAIN (something like `apps.cluster-abcd.abcd.sandbox1324.opentlc.com`) to the top of this page, and hit `Save`.
+6. Copy your TEAM_NAME (`labX`) and CLUSTER_DOMAIN (something like `apps.cluster-abcd.abcd.sandbox1324.opentlc.com`) to the top of this page, and hit `Save`. 
 
     ![clusterdomain](./images/clusterdomain.png)
 
     ![customizeinstructions](./images/customizeinstructions.png)
 
-6. Check if you can connect to OpenShift. Run the command below by replacing `<USERNAME>` and `<PASSWORD>` with the ones provided. You might have to say yes to accept `The server uses a certificate signed by an unknown authority.` message
+6. Check if you can connect to OpenShift. Run the command below by replacing `<USERNAME>` and `<PASSWORD>` with the ones provided. You might have to say yes to accept `The server uses a certificate signed by an unknown authority.` message.
 
     <p class="tip">
     ⛷️ <b>TIP</b> ⛷️ - Before you hit enter, make sure you change the username and password to match your team's login details. If your password includes special characters, put it in single quotes. ie: <strong>'A8y?Rpm!9+A3B/KG'</strong>
@@ -49,5 +49,11 @@
     ```
 
     ![new-project](./images/new-project.png)
+
+8. You can login OpenShift UI from this URL to view your project:
+
+    ```bash
+    https://console-openshift-console.<CLUSTER_DOMAIN>
+    ```
 
 🪄🪄 Now, let's continue with even more exciting tools... !🪄🪄
